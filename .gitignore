@@ -4,3 +4,6 @@
 # Compilation
 target
 out
+
+# nREPL
+.nrepl*
