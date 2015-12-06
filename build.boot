@@ -43,15 +43,22 @@
 
 (deftask deps [])
 
+(deftask gen-styles []
+  (garden :styles-var 'gitalive.styles/screen
+          :output-to "public/css/screen.css"))
+
 (deftask dev
   "Start dev front environment: cljs live-reload, nRepl, etc"
-  []
+  [s silent bool "Disable sounds. Default to false"]
   (task-options! garden {:pretty-print true})
   (comp (watch)
-        (speak)
+        (if silent
+          identity
+          (speak))
         (reload :on-jsload 'gitalive.front/main)
         (cljs-repl)
-        (cljs :source-map true :optimizations :none)))
+        (cljs :source-map true :optimizations :none)
+        (gen-styles)))
 
 (deftask build-clj
   "Build backend package"
@@ -64,7 +71,8 @@
 (deftask build-cljs
   "Compile frontend"
   []
-  (comp (cljs :optimizations :advanced)))
+  (comp (gen-styles)
+        (cljs :optimizations :advanced)))
 
 (deftask build
   "Build and package the project"

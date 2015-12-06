@@ -14,8 +14,9 @@
   (html5
    [:html
     [:head
-     ;; [:link {:rel "stylesheet" :href "/css/screen.css"}]
-     ]
+     [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
+     [:link {:rel "stylesheet" :type "text/css" :href "https://fonts.googleapis.com/css?family=Source+Code+Pro:400,200,300,500,700,900,600"}]
+     [:link {:rel "stylesheet" :href "/css/screen.css"}]]
     [:body
      [:div#container]
      [:script {:type "text/javascript" :src "/js/main.js"}]]]))

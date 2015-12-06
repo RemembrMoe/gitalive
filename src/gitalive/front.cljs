@@ -69,33 +69,34 @@
     (let [val-name (r/atom "bailer")
           val-clone-url (r/atom "https://github.com/dgellow/bailer.git")]
       (fn []
-        [:div
+        [:div.component-form
          [:h2 "Register a repository"]
          [:form {:on-submit
                  #(do (.preventDefault %)
                       (chsk-send! [:queue/new-repo
                                    {:clone-url @val-clone-url
                                     :name @val-name}]))}
-          [:label "Name"]
-          [:input {:type "text" :value @val-name
-                   :name "repo-name"
-                   :on-change
-                   #(reset! val-name (-> % .-target .-value))}]
-          [:label "Clone url"]
-          [:input {:type "text" :value @val-clone-url
-                   :name "repo-clone-url"
-                   :on-change
-                   #(reset! val-clone-url (-> % .-target .-value))}]
-          [:input {:type "submit"}]]]))}))
+          [:div.group
+           [:label "Name"]
+           [:input {:type "text" :value @val-name
+                    :name "repo-name"
+                    :on-change
+                    #(reset! val-name (-> % .-target .-value))}]]
+          [:div.group
+           [:label "Clone url"]
+           [:input {:type "text" :value @val-clone-url
+                    :name "repo-clone-url"
+                    :on-change
+                    #(reset! val-clone-url (-> % .-target .-value))}]]
+          [:input.submit {:type "submit"}]]]))}))
 
 (defn component-entry
   [{id :id status :status user :user repo :repo date :date}]
-  [:dl
-   [:dt "id"][:dd (str id)]
-   [:dt "date"][:dd (str date)]
-   [:dt "status"][:dd (str status)]
-   [:dt "user"][:dd (str user)]
-   [:dt "repo"][:dd (str repo)]])
+  [:div.entry {:class-name status}
+   [:h3.repo-name (:name repo)]
+   [:div.data
+    [:div.repo-url [:a {:href (:clone-url repo)} (:clone-url repo)]]
+    [:div.id (str " #" (first (clojure.string/split id #"-")))]]])
 
 (defn component-queue []
   (r/create-class
@@ -119,17 +120,17 @@
                          reverse
                          (map component-entry)
                          (map #(vector :li {:key (js/Math.random)} %)))]
-        [:div
-         [:h2 "queue"]
-         [:ul entries]]))}))
+        [:div.component-queue
+         [:h2 "Queue"]
+         [:ul.queue entries]]))}))
 
 ;; Pages
 (defn page-basic []
   (fn [cmpnt]
     [:div
-     [:header
-      [:h1 "gitalive"]]
-     [:div.content
+     [:header.layout
+      [:h1 "git:alive"]]
+     [:div.content.layout
       [component-form]
       [component-queue]]]))
 
