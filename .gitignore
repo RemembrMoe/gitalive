@@ -7,3 +7,6 @@ out
 
 # nREPL
 .nrepl*
+
+# Data files
+data
